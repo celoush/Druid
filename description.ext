@@ -1,0 +1,42 @@
+#include "celo\font.hpp"
+
+onLoadIntroTime = false;
+onLoadMissionTime = false;
+OnLoadMission = $STR_CELO_LOAD_TEXT;
+OnLoadMissionIntro = $STR_CELO_LOAD_TEXT;
+
+author= $STR_CELO_title1;
+OnLoadName = $STR_CELO_MissionName;
+
+showGPS = 1; 
+debriefing = 1; 
+showCompass = 1; 
+showMap = 1; 
+showNotepad = 0; 
+showWatch = 1;
+
+loadScreen = "images\load_screen.jpg";
+
+doneKeys[] = {"klic_celo_druid"};
+
+class CfgDebriefing
+{  
+	class End1
+	{
+		title = $STR_CELO_DEBR_title;
+		subtitle = "";
+		description = $STR_CELO_DEBR_description;
+		pictureBackground = "images\load_screen.jpg";
+		picture = "b_inf";
+		pictureColor[] = {0.0,0.3,0.6,1};
+	};
+	class epicFail
+	{
+		title = $STR_CELO_DEBR_FAIL_title;
+		subtitle = "";
+		description = $STR_CELO_DEBR_FAIL_description;
+		pictureBackground = "images\load_screen.jpg";
+		picture = "b_inf";
+		pictureColor[] = {0.0,0.3,0.6,1};
+	};
+};

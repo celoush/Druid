@@ -1,0 +1,7 @@
+version 1.02
+- localization fix
+- minor bugs fix
+version 1.01
+- diary addded
+version 1.00
+- first version
