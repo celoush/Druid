@@ -33,7 +33,6 @@ celo_fnc_lighting_effect = {
 
 
 celo_fnc_create_lighting = {
-	//conYellow("Lighting");
 	_pos = [druid] call celo_fnc_lighting_pos;
 	[_pos] spawn celo_fnc_lighting_effect;
 	_pos

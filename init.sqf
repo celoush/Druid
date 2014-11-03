@@ -8,7 +8,6 @@
 #define DIK_8 0x09
 #define DIK_9 0x0A
 
-//#include "debug_console.hpp";
 #include "celo_lighting.sqf";
 #include "celo_lighting_pos.sqf";
 #include "celo_trees.sqf";
@@ -25,6 +24,7 @@
 #include "celo_random_bool.sqf";
 #include "celo_hvozd_power.sqf";
 #include "celo_intermezzo_camera.sqf";
+#include "celo_dynamic_wp.sqf";
 
 player call celo_fnc_druid_init;
 
@@ -47,8 +47,7 @@ celo_fnc_unit_check_player = {
 		waitUntil {sleep 0.15;((_unit knowsAbout player >= 1.5) or (!alive _unit))};
 		if (!alive _unit) exitWith {false};
 		_unit setVariable ["contact",1];
-		//conWhite("unit knowsAbout player!!!");
-		//conWhite(str _unit);
+		_unit setUnitPos "MIDDLE";
 
 		_contact_count = _contact_count + 1;
 
@@ -69,6 +68,7 @@ celo_fnc_unit_check_player = {
 	 		};
  		};
 		waitUntil {sleep 0.15;((_unit knowsAbout player < 1.5) or (!alive _unit))};
+		_unit setUnitPos "UP";
 	};
 };
 
@@ -105,14 +105,16 @@ e_units = e1_units + e2_units + e3_units + e4_units + e5_units + e6_units;
 		{ 			
 			_actual_group = _x;
 			if (({alive _x} count (_actual_group select 2)) == 0) then {
-				//conRed("GROUP DESTROYED");
 				_actual_group call celo_fnc_clean_area;
 				celo_druid_groups = celo_druid_groups - [_actual_group];
 			};
 		} foreach celo_druid_groups;
 	}];
+	if (random 1 > 0.5) then {
+		_x call celo_fnc_dynamic_waypoints;
+	};
 
-} foreach e_units;
+} foreach (e_units);
 
 e1_place setVariable ["heroism",0];
 e2_place setVariable ["heroism",0];
@@ -157,8 +159,6 @@ celo_fnc_clean_area = {
 	_this spawn {	
 		_group_data = _this; // [position,place,units]		
 		_count = 0;
-		//conYellow("AREA CLEARED");
-		//conWhite(str _this);
 		waitUntil { // wait until all are above 100m or dead
 			sleep 1;  
 			_count = 0;
@@ -173,7 +173,6 @@ celo_fnc_clean_area = {
 			} foreach (_group_data select 2);
 			_ok
 		};
-		//conRed("AREA READY FOR SOUL CLEAN");
 		hint localize "STR_CELO_soothe_ready";
 		player addAction [localize "STR_CELO_sooth_action_name",{_this call celo_fnc_sooth},[_group_data,_count]];
 	};
@@ -189,8 +188,6 @@ celo_druid_hvozd_add_powers = [
 
 celo_turn_off_modes = {
 	_mode_name = _this;
-
-	//conYellow(str _mode_name);
 
 	if ((player getVariable "ghost_mode" == 1) and (_mode_name!="ghost_mode")) then { // turn off ghost mode
 		call celo_fnc_turn_ghost_mode;
@@ -334,8 +331,6 @@ celo_fnc_get_actual_group_index = {
 	_actual	
 };
 
-//conBlueTime("MISSION STARTED");
-
 0 spawn {
 	waituntil {!(IsNull (findDisplay 46))};
 	_keydownEH = (findDisplay 46) displayAddEventHandler ["KeyDown", "_this call celo_fnc_keydownFc"];
@@ -343,25 +338,25 @@ celo_fnc_get_actual_group_index = {
 
 player addAction [localize "STR_CELO_1_navigation_mode",{
 	call celo_fnc_navigation_mode;
-}];
+},nil,7,false,false];
 player addAction [localize "STR_CELO_2_fear_detection_mode",{
 	call celo_fnc_fear_detection_mode;
-}];
+},nil,6,false,false];
 player addAction [localize "STR_CELO_3_ghost_mode",{
 	call celo_fnc_ghost_mode;
-}];
+},nil,5,false,false];
 player addAction [localize "STR_CELO_5_rest",{
 	call celo_fnc_rest;
-}];
+},nil,4,false,false];
 player addAction [localize "STR_CELO_7_lightning",{
 	call celo_fnc_lightning_effect;
-}];
+},nil,3,false,false];
 player addAction [localize "STR_CELO_8_destruction",{
 	call celo_fnc_demolition_effect;
-}];
+},nil,2,false,false];
 player addAction [localize "STR_CELO_9_fireplace",{
 	call celo_fnc_turn_fireplace;
-}];
+},nil,1,false,false];
 
 0 spawn {
 	waitUntil {sleep 2;count celo_druid_groups == 0};

@@ -12,8 +12,7 @@ celo_fnc_init_fear_detection = {
 			};
 			removeMusicEventHandler ["MusicStop",_ehMStopID];
 			if (!(call celo_fnc_is_active_detection)) then {
-				1 fadeMusic 0;
-				//3 call celo_fnc_setDefaultColors;
+				1 fadeMusic 0;				
 				0 spawn {
 					sleep 1.1;
 					if (!(call celo_fnc_is_active_detection)) then {
@@ -33,17 +32,11 @@ celo_fnc_init_fear_detection = {
 					_fear = _target getVariable "fear";
 					_heroism = _target getVariable "heroism";				
 
-					//conYellow('fear and heroism');
-					//conWhite(str _fear);
-					//conWhite(str _heroism);
-
 					_sound = 1 - (((_heroism - _fear)/100) max 0);
 
 					if (_sound != _before) then {
 						0.1 fadeMusic _sound;
 						_before = _sound;
-						//conYellow("SET FEAR SOUND");
-						//conWhite(str _sound);
 					};
 				};
 				sleep 0.3333;

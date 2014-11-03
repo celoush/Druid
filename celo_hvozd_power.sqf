@@ -1,7 +1,5 @@
 celo_fnc_add_hvozd_power = {
 	player setVariable ["hvozd_power", ((player getVariable "hvozd_power") + _this) max 0];
-	//conYellow('hvozd_power');
-	//conWhite(str (player getVariable "hvozd_power"));
 };
 
 celo_fnc_get_actual_hvozd_power_for_ability = {

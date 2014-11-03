@@ -1,3 +1,9 @@
+version 1.04
+- spreading fear
+- minor bugs fix
+version 1.03
+- missing string in stringtable fix
+- dynamics waypoints for some units
 version 1.02
 - localization fix
 - minor bugs fix

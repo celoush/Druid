@@ -29,7 +29,7 @@ class Mission
 	class Intel
 	{
 		briefingName="Druid";
-		overviewText="Made by Celoush 2014 -  - v1.02";
+		overviewText="Made by Celoush 2014 - v1.04";
 		resistanceWest=0;
 		resistanceEast=1;
 		timeOfChanges=28800;

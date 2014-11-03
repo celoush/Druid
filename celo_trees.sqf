@@ -1,5 +1,4 @@
 celo_fnc_cut_trees = {	
-	//conPurple("Trees");
 	_distance = 30;
 	_angle = 90-getdir druid;
 	_count = 0;
@@ -14,7 +13,5 @@ celo_fnc_cut_trees = {
 	} forEach nearestObjects [_pos,[],15];
 	enableCamShake true;
 	addCamShake [(_count min 10), 3, 100];
-	//conYellow(str _pos);
-	//conYellow(str _count);
 	[_pos,_count]
 };

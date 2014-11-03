@@ -25,10 +25,6 @@ celo_fnc_setGroupFear = {
 		_add_fear = _coef;
 	};
 
-	//conGreen("FEAR");
-	//conWhite(str _effect_pos);
-	//conWhite(str (_group select 0));
-	//conGreen(str _add_fear);
 	_fear_arr = [];
 	_group_heroism = 0;
 	{
@@ -46,25 +42,16 @@ celo_fnc_setGroupFear = {
 
 	//_basic_group_fear = _fear_arr call celo_fnc_getMedian;
 	_basic_group_fear = _fear_arr call celo_fnc_getMean;
-	//conGreen("FEAR ARR");
-	//conWhite(str _fear_arr);
-	//conGreen("FEAR GROUP");
-	//conWhite(str _basic_group_fear);
 
 	_group_fear = _basic_group_fear + count (_group select 2);
 	(_group select 1) setVariable ["fear",_group_fear];
 	(_group select 1) setVariable ["heroism",_group_heroism];
 
-	//conWhite(str _group_fear);
-	//conPurple(str _group_heroism);
-
 	if (_group_fear > (_group_heroism/2)) then {
 		{_x setBehaviour "AWARE"} foreach (_group select 2);
-		//conGreen("FEAR AWARE");
 	};
 
 	if (_group_fear > (_group_heroism*3/4)) then {
-		//conGreen("FEAR COMBAT");		
 		{
 			_x setBehaviour "COMBAT";
 			_x setUnitPos "UP";
@@ -74,13 +61,9 @@ celo_fnc_setGroupFear = {
 	};
 
 	if (_group_fear > _group_heroism) then {
-		//conRed(" RUN ");
 		hint localize "STR_CELO_group_scared";
-		//conRed(str celo_druid_groups);
 		_group call celo_fnc_clean_area;
 		celo_druid_groups = celo_druid_groups - [_group];
-		//conWhite(str _group);
-		//conBlue(str celo_druid_groups);
 		_pos = _group select 0;
 		_new_group = objNull;
 		_index = -1;
@@ -96,32 +79,39 @@ celo_fnc_setGroupFear = {
 		{
 			_wp = (group _x) addWaypoint [getpos home,0];
 			if (alive _x) then {
-				//conBlue(str _x);
 				_wp setWaypointType "MOVE";
 				if (
 					(count celo_druid_groups > 0) and 
 					((_x getVariable "heroism") > (_x getVariable "fear")) or ((_x getVariable "pride") > (_x getVariable "fear"))) 
 				then {
-					//conWhite("move to another group");
 					_wp setWaypointSpeed "NORMAL";
 					_wp setWaypointPosition [_pos,10];
 					_wp setWaypointBehaviour "AWARE";
 					_wp setWaypointCombatMode "GREEN";
-					//conWhite(str _wp);
 					[_x,_pos,_index] spawn {
 						_unit = _this select 0;
 						_pos = _this select 1;
 						_index = _this select 2;
 						_distance = 30 + random 10;
 						waitUntil {(_unit distance _pos) < _distance};
+						_units_count = count ((celo_druid_groups select _index) select 2);
 						if (_index >= 0 and (count celo_druid_groups > 0)) then {
+							{ 
+								_fear_target = _x getVariable "fear";
+								_heroism_target = _x getVariable "heroism";
+								_fear_unit = _unit getVariable "fear";
+								if (_heroism_target < _fear_unit and _units_count>0) then {
+									_fear_target = _fear_target + ((_fear_unit - _heroism_target) / _units_count); 
+									_x setVariable ["fear",_fear_target];
+								};
+								//_x  
+							} foreach ((celo_druid_groups select _index) select 2);
 							_new_units_group = [_unit] + ((celo_druid_groups select _index) select 2);
 							(celo_druid_groups select _index) set [2,_new_units_group]; //add unit to group
 						};
 					};
 
 				} else {
-					//conYellow("zdrha");
 					_wp setWaypointSpeed "FULL";
 					_wp setWaypointBehaviour "CARELESS";
 					_wp setWaypointCombatMode "BLUE";

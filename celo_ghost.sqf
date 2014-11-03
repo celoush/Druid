@@ -20,7 +20,6 @@ celo_fnc_init_ghost = {
 };
 
 celo_fnc_turn_ghost_mode = {
-	//conYellow("Ghost");
 
 	if (player getVariable "ghost_mode" == 0) then {		
 
@@ -38,7 +37,6 @@ celo_fnc_turn_ghost_mode = {
 		player setObjectTextureGlobal [0, "#(argb,512,512,1)r2t(rendertarget0,1.0)"];
 		//player allowDamage false;
 		player addEventHandler["HandleDamage",{
-			//conWhite("Hit");
 			player setDamage ((getDammage player) - (_this select 2));
 			5*(_this select 2) call celo_fnc_add_hvozd_power;
 		}];
